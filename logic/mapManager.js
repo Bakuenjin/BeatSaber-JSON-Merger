@@ -48,21 +48,23 @@ mapManager.prototype.loadParts = function (mapsPath) {
         var files = fs.readdirSync(mapsPath);
 
         files.forEach(file => {
-            const filePath = path.join(mapsPath, file);
-            const data = fs.readFileSync(filePath);
-            const mapData = JSON.parse(data);
+            if (path.extname(file) == ".json") {
+                const filePath = path.join(mapsPath, file);
+                const data = fs.readFileSync(filePath);
+                const mapData = JSON.parse(data);
 
-            var eventPart = new EventPart(file);
-            var mapPart = new MapPart(file);
-            var obstaclePart = new ObstaclePart(file);
+                var eventPart = new EventPart(file);
+                var mapPart = new MapPart(file);
+                var obstaclePart = new ObstaclePart(file);
 
-            eventPart.parseData(mapData["_events"]);
-            mapPart.parseData(mapData["_notes"]);
-            obstaclePart.parseData(mapData["_obstacles"]);
+                eventPart.parseData(mapData["_events"]);
+                mapPart.parseData(mapData["_notes"]);
+                obstaclePart.parseData(mapData["_obstacles"]);
 
-            this._eventParts.push(eventPart);
-            this._mapParts.push(mapPart);
-            this._obstacleParts.push(obstaclePart);
+                this._eventParts.push(eventPart);
+                this._mapParts.push(mapPart);
+                this._obstacleParts.push(obstaclePart);
+            }
         });
 
         this.sortEventParts();
@@ -72,8 +74,7 @@ mapManager.prototype.loadParts = function (mapsPath) {
     }
 }
 
-mapManager.prototype.hasLoaded = function()
-{
+mapManager.prototype.hasLoaded = function () {
     return this._baseLoaded && this._partsLoaded;
 }
 
@@ -175,8 +176,7 @@ mapManager.prototype.build = function () {
         var mapData = this.connectMapParts();
         var obstacleData = this.connectObstacleParts();
 
-        if(eventData != undefined && mapData != undefined && obstacleData != undefined)
-        {
+        if (eventData != undefined && mapData != undefined && obstacleData != undefined) {
             var fullObj = {
                 _version: this._baseMap.getVersion(),
                 _beatsPerMinute: this._baseMap.getBeatsPerMinute(),
@@ -189,11 +189,11 @@ mapManager.prototype.build = function () {
                 _notes: mapData,
                 _obstacles: obstacleData
             }
-    
+
             fs.writeFileSync(this._savePath, JSON.stringify(fullObj), {
                 encoding: 'utf-8'
             });
-    
+
             return true;
         }
     }
