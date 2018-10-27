@@ -1,6 +1,7 @@
 module.exports = obstaclePart;
 
-function obstaclePart() {
+function obstaclePart(filename) {
+    this._name = filename;
     this._obstacles = [];
 }
 
@@ -17,6 +18,8 @@ obstaclePart.prototype.parseData = function (obstacles) {
         });
     }
 }
+
+obstaclePart.prototype.getName = function() { return this._name; }
 
 obstaclePart.prototype.getObstacles = function () {
     return this._obstacles;

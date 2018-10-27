@@ -1,6 +1,7 @@
 module.exports = mapPart;
 
-function mapPart() {
+function mapPart(filename) {
+    this._name = filename;
     this._notes = [];
 }
 
@@ -22,6 +23,8 @@ mapPart.prototype.parseData = function (notes) {
         });
     }
 }
+
+mapPart.prototype.getName = function() { return this._name; }
 
 mapPart.prototype.getNotes = function () {
     return this._notes;

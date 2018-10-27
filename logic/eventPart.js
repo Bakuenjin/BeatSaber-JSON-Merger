@@ -1,6 +1,7 @@
 module.exports = eventPart;
 
-function eventPart() {
+function eventPart(filename) {
+    this._name = filename;
     this._events = [];
 }
 
@@ -16,9 +17,9 @@ eventPart.prototype.parseData = function (events) {
     }
 }
 
-eventPart.prototype.getEvents = function () {
-    return this._events;
-}
+eventPart.prototype.getName = function() { return this._name; }
+
+eventPart.prototype.getEvents = function () { return this._events; }
 
 eventPart.prototype.getLowestTime = function () {
     if (this._events.length > 0) {

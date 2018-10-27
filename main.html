@@ -59,29 +59,43 @@
                         output location</button>
                 </div>
             </div>
-            <br><br>
-            <div class="row">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <button type="button" id="load-data-btn" class="btn btn-secondary btn-sm" style="width: 100%">Load
-                        data</button>
-                </div>
-                <div class="col-3"></div>
-            </div>
             <br>
             <div class="row">
-                <div class="col-4"></div>
-                <div id="validation-output" class="col-4">
-                    NOTHING
+                <div class="col-12 info-text">
+                    Displays invalid timestamps:
                 </div>
             </div>
             <div class="row">
-                <div class="col-3"></div>
-                <div class="col-6">
-                    <button type="button" id="save-data-btn" class="btn btn-secondary btn-sm" style="width: 100%">Save
-                        map</button>
+                <div class="col-8">
+                    <textarea id="error-log" class="full-size" disabled></textarea>
                 </div>
-                <div class="col-3"></div>
+                <div class="col-4">
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="button" id="load-data-btn" class="btn btn-secondary btn-sm" style="width: 100%"
+                                disabled>Check data</button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div id="validation-output" class="col-12">
+                            NOTHING
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="button" id="save-data-btn" class="btn btn-secondary btn-sm" style="width: 100%"
+                                disabled>Save map</button>
+                        </div>
+                    </div>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-12">
+                            <button type="button" id="clear-data-btn" class="btn btn-secondary btn-sm" style="width: 100%">Clear
+                                all</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4"></div>
             </div>
         </div>
     </div>
