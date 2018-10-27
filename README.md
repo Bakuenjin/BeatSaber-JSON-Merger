@@ -10,4 +10,4 @@ Basic functionality working.
 `Save path` is the path to the location you want the merged file to be placed at.
 
 
-Thats all basically, if you have any questions or future idea, I would recommend to ask me on Discord.
+Thats all basically, if you have any questions or ideas, I would recommend to ask me on Discord.
