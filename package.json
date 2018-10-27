@@ -1,0 +1,14 @@
+{
+  "name": "beatsaber-json-merger",
+  "version": "1.0.0",
+  "description": "Merges multiple .json files containing parts of a single map, making group projects easier to manage.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "Bakuenjin",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^3.0.6"
+  }
+}

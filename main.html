@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Beatsaber JSON merger</title>
+    <link rel="stylesheet" href="./frameworks/bootstrap.min.css">
+    <link rel="stylesheet" href="./main.css">
+</head>
+
+<body>
+    <nav class="navbar navbar-light bg-light">
+        <span id="header" class="navbar-brand mb-0 h1">Beatsaber JSON Merger</span>
+    </nav>
+    <br>
+    <div id="path-selection-container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12 info-text">
+                    Select .json file with the base difficulty information (njs, bpm, etc):
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8">
+                    <input type="text" class="form-control path-view" id="base-input" disabled>
+                </div>
+                <div class="col-4">
+                    <button type="button" id="base-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
+                        base file</button>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12 info-text">
+                    Select path to directory containing only all .json files you want to merge into a beatmap:
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8">
+                    <input type="text" class="form-control path-view" id="parts-input" disabled>
+                </div>
+                <div class="col-4">
+                    <button type="button" id="path-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
+                        directory</button>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12 info-text">
+                    Select output directory and name:
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-8">
+                    <input type="text" class="form-control path-view" id="output-input" disabled>
+                </div>
+                <div class="col-4">
+                    <button type="button" id="output-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
+                        output location</button>
+                </div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <button type="button" id="load-data-btn" class="btn btn-secondary btn-sm" style="width: 100%">Load
+                        data</button>
+                </div>
+                <div class="col-3"></div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-4"></div>
+                <div id="validation-output" class="col-4">
+                    NOTHING
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-3"></div>
+                <div class="col-6">
+                    <button type="button" id="save-data-btn" class="btn btn-secondary btn-sm" style="width: 100%">Save
+                        map</button>
+                </div>
+                <div class="col-3"></div>
+            </div>
+        </div>
+    </div>
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <script src="./frameworks/jquery-3.3.1.min.js"></script>
+    <script src="./frameworks/popper.min.js"></script>
+    <script src="./frameworks/bootstrap.min.js"></script>
+    <script>if (window.module) module = window.module;</script>
+    <script> require("./renderer.js"); </script>
+</body>
+
+</html>
