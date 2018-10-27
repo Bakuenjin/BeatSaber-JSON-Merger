@@ -64,8 +64,7 @@ mapManager.prototype.setSavePath = function (savePath) {
     this._savePath = savePath;
 }
 
-mapManager.prototype.sort = function(array)
-{
+mapManager.prototype.sort = function (array) {
     array.sort((a, b) => {
         if (a.getLowestTime() > b.getLowestTime())
             return 1;
@@ -88,8 +87,7 @@ mapManager.prototype.sortObstacleParts = function () {
 }
 
 // Maybe later details about failed validation!
-mapManager.prototype.validate = function(array)
-{
+mapManager.prototype.validate = function (array) {
     for (let i = 0; i < array.length - 1; i++) {
         const part = array[i];
         const nextPart = array[i + 1];
@@ -101,9 +99,9 @@ mapManager.prototype.validate = function(array)
 }
 
 mapManager.prototype.validateParts = function () {
-    return this.validate(this._eventParts) && 
-           this.validate(this._mapParts) &&
-           this.validate(this._obstacleParts);
+    return this.validate(this._eventParts) &&
+        this.validate(this._mapParts) &&
+        this.validate(this._obstacleParts);
 }
 
 mapManager.prototype.connectEventParts = function () {
@@ -132,8 +130,8 @@ mapManager.prototype.connectMapParts = function () {
     return undefined;
 }
 
-mapManager.prototype.connectObstacleParts = function() {
-    if(this._obstacleParts.length > 0) {
+mapManager.prototype.connectObstacleParts = function () {
+    if (this._obstacleParts.length > 0) {
         var allObstacles = [];
 
         for (let i = 0; i < this._obstacleParts.length; i++) {

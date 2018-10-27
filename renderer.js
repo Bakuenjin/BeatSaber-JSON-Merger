@@ -74,9 +74,3 @@ loadDataBtn.onclick = function () {
 saveDataBtn.onclick = function () {
     mapManager.build();
 }
-// const testPath = path.join("C:", "Users", "ZameitGaming", "Documents", "testfolder")
-// mapManager.loadMapParts(testPath); 
-// mapManager.loadBaseMap(path.join(testPath, "sakuraNoUta.json"));
-
-// console.log(mapManager.validateParts());
-//console.log(mapManager.build("test"));
