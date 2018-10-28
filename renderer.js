@@ -1,18 +1,30 @@
 const { dialog, shell } = require('electron').remote;
+const ipcRenderer = require('electron').ipcRenderer;
 //const shell = require('electron').remote.shell;
 const path = require('path');
+const fs = require('fs');
 const MapManager = require("./logic/mapManager");
 
+const minimizeBtn = document.getElementById('minimize-btn');
+const closeBtn = document.getElementById('close-btn');
+
 const baseDialogBtn = document.getElementById("base-dialog-btn");
+const eventsDialogBtn = document.getElementById("events-dialog-btn");
 const pathDialogBtn = document.getElementById("path-dialog-btn");
 const outputDialogBtn = document.getElementById("output-dialog-btn");
 const validateDataBtn = document.getElementById("load-data-btn");
 const saveDataBtn = document.getElementById("save-data-btn");
 const clearDataBtn = document.getElementById("clear-data-btn");
 
-const baseInput = document.getElementById("base-input");
-const partsInput = document.getElementById("parts-input");
-const outputInput = document.getElementById("output-input"); // I dare you to question my names
+const baseNameDiv = document.getElementById("base-name");
+const eventsNameDiv = document.getElementById("events-name");
+const partsNameDiv = document.getElementById("parts-name");
+const outputNameDiv = document.getElementById("output-name");
+
+const basePopup = document.getElementById('#base-btn-info');
+const eventsPopup = document.getElementById('#events-btn-info');
+const pathPopup = document.getElementById('#parts-btn-info');
+const outputPopup = document.getElementById('#output-btn-info');
 
 const validationDiv = document.getElementById("validation-output");
 const errorLog = document.getElementById("error-log");
@@ -20,6 +32,7 @@ const errorLog = document.getElementById("error-log");
 var mapManager = new MapManager();
 
 var baseSelected = false;
+var eventsSelected = false;
 var directorySelected = false;
 var saveSelected = false;
 var savePath = "";
@@ -29,6 +42,16 @@ function tryUnlock() {
         validateDataBtn.disabled = false;
     }
 
+}
+
+function appendNames(names, div) {
+    names.forEach(name => {
+        var nameDiv = document.createElement('div');
+        nameDiv.classList.add("nav-file-name");
+        nameDiv.innerText = name;
+        div.appendChild(nameDiv);
+    });
+    div.style.display = "block";
 }
 
 baseDialogBtn.onclick = function () {
@@ -42,11 +65,26 @@ baseDialogBtn.onclick = function () {
     });
 
     if (basePath != undefined) {
-        baseInput.value = basePath[0];
+        // baseNameDiv.innerHTML = path.basename(basePath[0]);
+        console.log("basefile loading");
         mapManager.loadBaseMap(basePath[0]);
+        appendNames([path.basename(basePath[0])], baseNameDiv);
         baseSelected = true;
     }
     tryUnlock();
+}
+
+eventsDialogBtn.onclick = function () {
+    eventsSelected = false;
+    var eventsPath = dialog.showOpenDialog({
+        title: "Select events file or directory."
+    });
+
+    if (eventsPath != undefined) {
+        mapManager.loadEventParts(eventsPath[0]);
+        appendNames(mapManager.getEventpartNames(), eventsNameDiv);
+        eventsSelected = true;
+    }
 }
 
 pathDialogBtn.onclick = function () {
@@ -59,8 +97,8 @@ pathDialogBtn.onclick = function () {
     });
 
     if (mapsPath != undefined) {
-        partsInput.value = mapsPath[0];
         mapManager.loadParts(mapsPath[0])
+        appendNames(mapManager.getMappartNames(), partsNameDiv);
         directorySelected = true;
     }
     tryUnlock();
@@ -77,9 +115,9 @@ outputDialogBtn.onclick = function () {
     });
 
     if (outputPath != undefined) {
-        outputInput.value = outputPath;
         mapManager.setSavePath(outputPath);
         savePath = path.dirname(outputPath);
+        appendNames([outputPath], outputNameDiv);
         saveSelected = true;
     }
     tryUnlock();
@@ -135,14 +173,30 @@ saveDataBtn.onclick = function () {
 
 clearDataBtn.onclick = function () {
     mapManager = new MapManager();
+    var sidenavText = document.getElementsByClassName("nav-file-name");
     validateDataBtn.disabled = true;
     saveDataBtn.disabled = true;
     baseSelected = false;
     directorySelected = false;
     saveSelected = false;
-    baseInput.value = "";
-    partsInput.value = "";
-    outputInput.value = "";
     errorLog.value = "";
+    for (let i = 0; i < sidenavText.length; i++) {
+        const textDiv = sidenavText[i];
+        textDiv.remove();
+    }
+
+    baseNameDiv.style.display = "none";
+    eventsNameDiv.style.display = "none";
+    partsNameDiv.style.display = "none";
+    outputNameDiv.style.display = "none";
+
     validationDiv.classList.remove("valid", "invalid");
+}
+
+minimizeBtn.onclick = function () {
+    ipcRenderer.send("minimize");
+}
+
+closeBtn.onclick = function () {
+    ipcRenderer.send("close");
 }

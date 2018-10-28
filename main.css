@@ -1,12 +1,22 @@
 body {
     background: #eaeaea;
+    -webkit-user-select: none;
 }
 
 #header {
+    -webkit-app-region: drag;
+    font-size: 20px;
+    line-height: 21px;
+    text-align: center;
     margin: auto;
-    width: 50%;
+    width: 75%;
     text-align: center;
     color: #eaeaea !important;
+    margin-bottom: 7px;
+}
+
+#header:hover {
+    cursor: default;
 }
 
 .path-view {
@@ -16,11 +26,16 @@ body {
 }
 
 .navbar {
+    padding-top:0;
+    padding-bottom: 0;
+    height: 30px !important;
+    z-index: 100;
     background-color: #393d42 !important;
     /* background-color: #484d53 !important; */
 }
 
 .info-text {
+    margin-top:10px;
     margin-bottom: 5px;
 }
 
@@ -48,4 +63,72 @@ body {
 textarea {
     background-color: white;
     resize: none;
+}
+
+#side-nav {
+    height: 100%; /* Full-height: remove this if you want "auto" height */
+    width: 300px; /* Set the width of the sidebar */
+    position: fixed; /* Fixed Sidebar (stay in place on scroll) */
+    z-index: 50; /* Stay on top */
+    top: 0; /* Stay at the top */
+    left: 0;
+    background-color: #484d53;
+    /* background-color: #44484c; *//* Black */
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 50px;
+}
+
+.sidenav-title {
+    padding-left: 6px;
+    padding-top: 3px;
+    font-size: 18px;
+    color: #eaeaea;
+}
+
+.nav-file-name {
+    padding-left: 12px;
+    font-size: 12px;
+    color: #eaeaea;
+}
+
+#path-selection-container {
+    margin-left: 300px;
+}
+
+#minimize-btn {
+    position: absolute;
+    z-index: 150;
+    color: #eaeaea;
+    background-color: transparent;
+    right: 44px;
+    top: 0;
+    width: 44px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+
+#minimize-btn:hover {
+    cursor: pointer;
+    background-color: #eaeaea;
+    color: #484d53;
+}
+
+#close-btn {
+    position: absolute;
+    z-index: 150;
+    color: #eaeaea;
+    background-color: transparent;
+    right: 0;
+    top: 0;
+    width: 44px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+}
+
+#close-btn:hover {
+    cursor: pointer;
+    background-color: crimson;
+    /* color: #484d53; */
 }

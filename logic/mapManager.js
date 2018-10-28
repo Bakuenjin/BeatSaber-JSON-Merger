@@ -16,6 +16,7 @@ function mapManager() {
     this._savePath = undefined
     this._baseLoaded = false;
     this._partsLoaded = false;
+    this._ownEvents = false;
 }
 
 mapManager.prototype.loadBaseMap = function (path) {
@@ -38,6 +39,38 @@ mapManager.prototype.loadBaseMap = function (path) {
     }
 }
 
+mapManager.prototype.loadEventParts = function (eventPath) {
+    if (fs.existsSync(eventPath)) {
+        var files = [];
+        var dirname = "";
+        if (fs.lstatSync(eventPath).isDirectory()) {
+            dirname = eventPath;
+            files = fs.readdirSync(eventPath);
+        }
+        else if(fs.lstatSync(eventPath).isFile()) {
+            dirname = eventPath.replace(path.basename(eventPath), "");
+            files.push(path.basename(eventPath));
+        }
+        if (files.length > 0) {
+            this._eventParts = [];
+            files.forEach(file => {
+                if (path.extname(file) == ".json") {
+                    const filePath = path.join(dirname, file);
+                    const data = fs.readFileSync(filePath);
+                    const mapData = JSON.parse(data);
+
+                    var eventPart = new EventPart(file);
+                    eventPart.parseData(mapData);
+                    this._eventParts.push(eventPart);
+                }
+            });
+
+            if(this._eventParts.length > 0)
+                this._ownEvents = true;
+        }
+    }
+}
+
 mapManager.prototype.loadParts = function (mapsPath) {
     this._eventParts = [];
     this._mapParts = [];
@@ -57,7 +90,8 @@ mapManager.prototype.loadParts = function (mapsPath) {
                 var mapPart = new MapPart(file);
                 var obstaclePart = new ObstaclePart(file);
 
-                eventPart.parseData(mapData["_events"]);
+                if (!this._ownEvents)
+                    eventPart.parseData(mapData["_events"]);
                 mapPart.parseData(mapData["_notes"]);
                 obstaclePart.parseData(mapData["_obstacles"]);
 
@@ -198,4 +232,29 @@ mapManager.prototype.build = function () {
         }
     }
     return false;
+}
+
+mapManager.prototype.getFilenames = function(array) {
+    var names = [];
+
+    array.forEach(element => {
+        names.push(element.getName());
+    });
+
+    return names;
+}
+
+mapManager.prototype.getEventpartNames = function()
+{
+    return this.getFilenames(this._eventParts);
+}
+
+mapManager.prototype.getMappartNames = function()
+{
+    return this.getFilenames(this._mapParts);
+}
+
+mapManager.prototype.getObstaclepartNames = function()
+{
+    return this.getFilenames(this._obstacleParts);
 }
