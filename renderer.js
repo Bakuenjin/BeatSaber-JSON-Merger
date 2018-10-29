@@ -21,11 +21,12 @@ const eventsNameDiv = document.getElementById("events-name");
 const partsNameDiv = document.getElementById("parts-name");
 const outputNameDiv = document.getElementById("output-name");
 
-const basePopup = document.getElementById('#base-btn-info');
-const eventsPopup = document.getElementById('#events-btn-info');
-const pathPopup = document.getElementById('#parts-btn-info');
-const outputPopup = document.getElementById('#output-btn-info');
+const basePopup = document.getElementById('base-btn-info');
+const eventsPopup = document.getElementById('events-btn-info');
+const pathPopup = document.getElementById('parts-btn-info');
+const outputPopup = document.getElementById('output-btn-info');
 
+const eventsDialogModeCbx = document.getElementById("toggle-events-cbx");
 const validationDiv = document.getElementById("validation-output");
 const errorLog = document.getElementById("error-log");
 
@@ -35,6 +36,8 @@ var baseSelected = false;
 var eventsSelected = false;
 var directorySelected = false;
 var saveSelected = false;
+
+var eventSelectDirectory = false;
 var savePath = "";
 
 function tryUnlock() {
@@ -52,6 +55,17 @@ function appendNames(names, div) {
         div.appendChild(nameDiv);
     });
     div.style.display = "block";
+}
+
+eventsDialogModeCbx.onchange = function () {
+    if (eventsDialogModeCbx.checked) {
+        eventSelectDirectory = true;
+        eventsDialogBtn.innerText = "Select events directory";
+    }
+    else {
+        eventSelectDirectory = false;
+        eventsDialogBtn.innerText = "Select events file";
+    }
 }
 
 baseDialogBtn.onclick = function () {
@@ -76,10 +90,24 @@ baseDialogBtn.onclick = function () {
 
 eventsDialogBtn.onclick = function () {
     eventsSelected = false;
-    var eventsPath = dialog.showOpenDialog({
-        title: "Select events file or directory."
-    });
-
+    var eventsPath = undefined;
+    if(eventSelectDirectory)
+    {
+        eventsPath = dialog.showOpenDialog({
+            title: "Select events file or directory.",
+            properties: [ "openDirectory" ]
+        });
+    
+    }
+    else {
+        eventsPath = dialog.showOpenDialog({
+            title: "Select events file or directory.",
+            filters: [{
+                name: "Beatmap",
+                extensions: ['json']
+            }]
+        });
+    }
     if (eventsPath != undefined) {
         mapManager.loadEventParts(eventsPath[0]);
         appendNames(mapManager.getEventpartNames(), eventsNameDiv);

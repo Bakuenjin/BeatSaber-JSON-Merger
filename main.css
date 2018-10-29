@@ -75,18 +75,24 @@ textarea {
     background-color: #484d53;
     /* background-color: #44484c; *//* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 50px;
+    padding-top: 30px;
+}
+
+.sidenav-header {
+    padding-left: 6px;
+    font-size: 24px;
+    color: #eaeaea;
 }
 
 .sidenav-title {
-    padding-left: 6px;
+    padding-left: 12px;
     padding-top: 3px;
     font-size: 18px;
     color: #eaeaea;
 }
 
 .nav-file-name {
-    padding-left: 12px;
+    padding-left: 18px;
     font-size: 12px;
     color: #eaeaea;
 }

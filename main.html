@@ -13,7 +13,9 @@
         <span id="header">Beatsaber JSON Merger</span>
     </nav>
     <div id="side-nav">
-
+        <div class="sidenav-header">
+            Included files:
+        </div>
         <div id="base-name" style="display: none;">
             <div class="sidenav-title">
                 Base file:
@@ -39,22 +41,24 @@
         <div class="container-fluid">
             <br>
             <div class="row">
-                <div class="col-2"></div>
                 <div class="col-4">
                     <button type="button" id="base-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
                         base file</button>
                 </div>
                 <div class="col-4">
                     <button type="button" id="events-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
-                        lighting file / directory</button>
+                        events file</button>
+                </div>
+                <div class="col-4">
+                    <input type="checkbox" id="toggle-events-cbx">
+                    <label for="toggle-events-cbx">Select directory</label>
                 </div>
             </div>
             <br>
             <div class="row">
-                <div class="col-2"></div>
                 <div class="col-4">
                     <button type="button" id="path-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
-                        directory</button>
+                        maps directory</button>
                 </div>
                 <div class="col-4">
                     <button type="button" id="output-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
@@ -102,20 +106,6 @@
     </div>
     <div id="minimize-btn">🗕</div>
     <div id="close-btn">✕</div>
-    <!-- <div class="popper-holder">
-        <div id="base-btn-info">
-            Select .json file to use for basic information (NJS, BPM, etc.)
-        </div>
-        <div id="events-btn-info">
-            Select file or folder containing lighting events (optional)
-        </div>
-        <div id="parts-btn-info">
-            Select map parts directory:
-        </div>
-        <div id="output-btn-info">
-            Select output directory and name:
-        </div>
-    </div> -->
     <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
     <script src="./frameworks/jquery-3.3.1.min.js"></script>
     <script src="./frameworks/popper.min.js"></script>
