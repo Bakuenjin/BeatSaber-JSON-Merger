@@ -49,7 +49,12 @@ function tryUnlock() {
     if (mapManager.hasLoaded() && baseSelected && directorySelected && saveSelected) {
         validateDataBtn.disabled = false;
     }
+}
 
+function resetValidation() {
+    errorLog.value = ""
+    validationDiv.classList.remove("valid", "invalid", "warning");
+    saveDataBtn.disabled = true;
 }
 
 function appendNames(names, div, parent) {
@@ -75,7 +80,6 @@ eventsDialogModeCbx.onchange = function () {
 }
 
 baseDialogBtn.onclick = function () {
-    baseSelected = false;
     var basePath = dialog.showOpenDialog({
         title: "Path to base file.",
         filters: [{
@@ -87,13 +91,13 @@ baseDialogBtn.onclick = function () {
     if (basePath != undefined) {
         mapManager.loadBaseMap(basePath[0]);
         appendNames([path.basename(basePath[0])], baseNameDiv, baseNameParent);
+        resetValidation();
         baseSelected = true;
     }
     tryUnlock();
 }
 
 eventsDialogBtn.onclick = function () {
-    eventsSelected = false;
     var eventsPath = undefined;
     if(eventSelectDirectory)
     {
@@ -115,12 +119,12 @@ eventsDialogBtn.onclick = function () {
     if (eventsPath != undefined) {
         mapManager.loadEventParts(eventsPath[0]);
         appendNames(mapManager.getEventpartNames(), eventsNameDiv, eventsNameParent);
+        resetValidation();
         eventsSelected = true;
     }
 }
 
 pathDialogBtn.onclick = function () {
-    directorySelected = false;
     var mapsPath = dialog.showOpenDialog({
         title: "Path to directory containing all .json files.",
         properties: [
@@ -131,13 +135,13 @@ pathDialogBtn.onclick = function () {
     if (mapsPath != undefined) {
         mapManager.loadParts(mapsPath[0])
         appendNames(mapManager.getMappartNames(), partsNameDiv, partsNameParent);
+        resetValidation();
         directorySelected = true;
     }
     tryUnlock();
 }
 
 outputDialogBtn.onclick = function () {
-    saveSelected = false;
     var outputPath = dialog.showSaveDialog({
         title: "Save file.",
         filters: [{
@@ -241,7 +245,7 @@ clearDataBtn.onclick = function () {
     partsNameDiv.innerHTML = "";
     outputNameDiv.innerHTML = "";
 
-    validationDiv.classList.remove("valid", "invalid");
+    validationDiv.classList.remove("valid", "invalid", "warning");
 }
 
 minimizeBtn.onclick = function () {
