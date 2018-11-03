@@ -192,42 +192,33 @@ mapManager.prototype.validateObstacles = function () {
 }
 
 mapManager.prototype.connectEventParts = function () {
-    if (this._eventParts.length > 0) {
-        var allEvents = [];
+    var allEvents = [];
 
-        for (let i = 0; i < this._eventParts.length; i++) {
-            const part = this._eventParts[i];
-            allEvents = allEvents.concat(part.getEvents());
-        }
-        return allEvents;
+    for (let i = 0; i < this._eventParts.length; i++) {
+        const part = this._eventParts[i];
+        allEvents = allEvents.concat(part.getEvents());
     }
-    return undefined;
+    return allEvents;
 }
 
 mapManager.prototype.connectMapParts = function () {
-    if (this._mapParts.length > 0) {
-        var allNotes = [];
+    var allNotes = [];
 
-        for (let i = 0; i < this._mapParts.length; i++) {
-            const part = this._mapParts[i];
-            allNotes = allNotes.concat(part.getNotes());
-        }
-        return allNotes;
+    for (let i = 0; i < this._mapParts.length; i++) {
+        const part = this._mapParts[i];
+        allNotes = allNotes.concat(part.getNotes());
     }
-    return undefined;
+    return allNotes;
 }
 
 mapManager.prototype.connectObstacleParts = function () {
-    if (this._obstacleParts.length > 0) {
-        var allObstacles = [];
+    var allObstacles = [];
 
-        for (let i = 0; i < this._obstacleParts.length; i++) {
-            const part = this._obstacleParts[i];
-            allObstacles = allObstacles.concat(part.getObstacles());
-        }
-        return allObstacles;
+    for (let i = 0; i < this._obstacleParts.length; i++) {
+        const part = this._obstacleParts[i];
+        allObstacles = allObstacles.concat(part.getObstacles());
     }
-    return undefined;
+    return allObstacles;
 }
 
 mapManager.prototype.build = function () {

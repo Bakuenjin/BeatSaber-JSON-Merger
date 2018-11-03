@@ -3,8 +3,8 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 let mainWindow;
 
 function createWindow() {
-    mainWindow = new BrowserWindow({ width: 1000, height: 600, frame: false});
-    //mainWindow.setMenu(null); resizable: false
+    mainWindow = new BrowserWindow({ width: 840, minWidth: 840, height: 600, minHeight: 600, frame: false});
+    // mainWindow.setMenu(null); 
     mainWindow.loadFile('main.html');
 
     mainWindow.on('closed', function () {
