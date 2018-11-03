@@ -16,15 +16,20 @@ const validateDataBtn = document.getElementById("load-data-btn");
 const saveDataBtn = document.getElementById("save-data-btn");
 const clearDataBtn = document.getElementById("clear-data-btn");
 
+const baseNameParent = document.getElementById("base-parent");
+const eventsNameParent = document.getElementById("events-parent");
+const partsNameParent = document.getElementById("parts-parent");
+const outputNameParent = document.getElementById("output-parent");
+
 const baseNameDiv = document.getElementById("base-name");
 const eventsNameDiv = document.getElementById("events-name");
 const partsNameDiv = document.getElementById("parts-name");
 const outputNameDiv = document.getElementById("output-name");
 
-const basePopup = document.getElementById('base-btn-info');
-const eventsPopup = document.getElementById('events-btn-info');
-const pathPopup = document.getElementById('parts-btn-info');
-const outputPopup = document.getElementById('output-btn-info');
+// const basePopup = document.getElementById('base-btn-info');
+// const eventsPopup = document.getElementById('events-btn-info');
+// const pathPopup = document.getElementById('parts-btn-info');
+// const outputPopup = document.getElementById('output-btn-info');
 
 const eventsDialogModeCbx = document.getElementById("toggle-events-cbx");
 const validationDiv = document.getElementById("validation-output");
@@ -47,14 +52,15 @@ function tryUnlock() {
 
 }
 
-function appendNames(names, div) {
+function appendNames(names, div, parent) {
+    div.innerHTML = "";
     names.forEach(name => {
         var nameDiv = document.createElement('div');
         nameDiv.classList.add("nav-file-name");
         nameDiv.innerText = name;
         div.appendChild(nameDiv);
     });
-    div.style.display = "block";
+    parent.style.display = "block";
 }
 
 eventsDialogModeCbx.onchange = function () {
@@ -79,10 +85,8 @@ baseDialogBtn.onclick = function () {
     });
 
     if (basePath != undefined) {
-        // baseNameDiv.innerHTML = path.basename(basePath[0]);
-        console.log("basefile loading");
         mapManager.loadBaseMap(basePath[0]);
-        appendNames([path.basename(basePath[0])], baseNameDiv);
+        appendNames([path.basename(basePath[0])], baseNameDiv, baseNameParent);
         baseSelected = true;
     }
     tryUnlock();
@@ -110,7 +114,7 @@ eventsDialogBtn.onclick = function () {
     }
     if (eventsPath != undefined) {
         mapManager.loadEventParts(eventsPath[0]);
-        appendNames(mapManager.getEventpartNames(), eventsNameDiv);
+        appendNames(mapManager.getEventpartNames(), eventsNameDiv, eventsNameParent);
         eventsSelected = true;
     }
 }
@@ -126,7 +130,7 @@ pathDialogBtn.onclick = function () {
 
     if (mapsPath != undefined) {
         mapManager.loadParts(mapsPath[0])
-        appendNames(mapManager.getMappartNames(), partsNameDiv);
+        appendNames(mapManager.getMappartNames(), partsNameDiv, partsNameParent);
         directorySelected = true;
     }
     tryUnlock();
@@ -145,7 +149,7 @@ outputDialogBtn.onclick = function () {
     if (outputPath != undefined) {
         mapManager.setSavePath(outputPath);
         savePath = path.dirname(outputPath);
-        appendNames([outputPath], outputNameDiv);
+        appendNames([outputPath], outputNameDiv, outputNameParent);
         saveSelected = true;
     }
     tryUnlock();
@@ -156,11 +160,12 @@ validateDataBtn.onclick = function () {
     var eventProblems = mapManager.validateEvents();
     var noteProblems = mapManager.validateNotes();
     var obstacleProblems = mapManager.validateObstacles();
+    var noteWarnings = mapManager.validateTransition();
 
     if (eventProblems.length > 0) {
         errorText += "\nFound " + eventProblems.length + " problem(s) while validating events:\n";
         eventProblems.forEach(problem => {
-            errorText += "Time: " + problem + "\n";
+            errorText += problem;
         });
     }
     if (noteProblems.length > 0) {
@@ -172,23 +177,36 @@ validateDataBtn.onclick = function () {
     if (obstacleProblems.length > 0) {
         errorText += "\nFound " + obstacleProblems.length + " problem(s) while validating obstacles:\n";
         obstacleProblems.forEach(problem => {
-            errorText += "Time: " + problem + "\n";
+            errorText += problem;
         });
     }
+    if(noteWarnings.length > 0) {
+        errorText += "\nFound " + noteWarnings.length + " warning(s) while validating transitions:\n";
+        noteWarnings.forEach(warning => {
+            errorText += warning;
+        })
+    }
 
-    if (eventProblems.length == 0 && noteProblems.length == 0 && obstacleProblems.length == 0) {
-        errorLog.value = "No problems found!"
-        validationDiv.innerHTML = "VALID";
-        validationDiv.classList.remove("valid", "invalid");
-        validationDiv.classList.add("valid");
+    if (eventProblems.length != 0 || noteProblems.length != 0 || obstacleProblems.length != 0) {
+        errorLog.value = errorText;
+        validationDiv.innerHTML = "INVALID";
+        validationDiv.classList.remove("valid", "invalid", "warning");
+        validationDiv.classList.add("invalid");
+        saveDataBtn.disabled = true;
+    }
+    else if(noteWarnings.length > 0) {
+        errorLog.value = errorText;
+        validationDiv.innerHTML = "WARNING";
+        validationDiv.classList.remove("valid", "invalid", "warning");
+        validationDiv.classList.add("warning");
         saveDataBtn.disabled = false;
     }
     else {
-        errorLog.value = errorText;
-        validationDiv.innerHTML = "INVALID";
-        validationDiv.classList.remove("valid", "invalid");
-        validationDiv.classList.add("invalid");
-        saveDataBtn.disabled = true;
+        errorLog.value = "No problems found!"
+        validationDiv.innerHTML = "VALID";
+        validationDiv.classList.remove("valid", "invalid", "warning");
+        validationDiv.classList.add("valid");
+        saveDataBtn.disabled = false;
     }
 }
 
@@ -213,10 +231,15 @@ clearDataBtn.onclick = function () {
         textDiv.remove();
     }
 
-    baseNameDiv.style.display = "none";
-    eventsNameDiv.style.display = "none";
-    partsNameDiv.style.display = "none";
-    outputNameDiv.style.display = "none";
+    baseNameParent.style.display = "none";
+    eventsNameParent.style.display = "none";
+    partsNameParent.style.display = "none";
+    outputNameParent.style.display = "none";
+
+    baseNameDiv.innerHTML = "";
+    eventsNameDiv.innerHTML = "";
+    partsNameDiv.innerHTML = "";
+    outputNameDiv.innerHTML = "";
 
     validationDiv.classList.remove("valid", "invalid");
 }

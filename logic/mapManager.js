@@ -7,8 +7,10 @@ const BaseMap = require("./baseMap");
 const EventPart = require("./eventPart");
 const MapPart = require("./mapPart");
 const ObstaclePart = require("./obstaclePart");
+const MapValidater = require("./mapValidater");
 
 function mapManager() {
+    this._validater = new MapValidater();
     this._baseMap = undefined;
     this._eventParts = [];
     this._mapParts = [];
@@ -47,8 +49,8 @@ mapManager.prototype.loadEventParts = function (eventPath) {
             dirname = eventPath;
             files = fs.readdirSync(eventPath);
         }
-        else if(fs.lstatSync(eventPath).isFile()) {
-            dirname = eventPath.replace(path.basename(eventPath), "");
+        else if (fs.lstatSync(eventPath).isFile()) {
+            dirname = path.join(eventPath, "..");
             files.push(path.basename(eventPath));
         }
         if (files.length > 0) {
@@ -60,19 +62,21 @@ mapManager.prototype.loadEventParts = function (eventPath) {
                     const mapData = JSON.parse(data);
 
                     var eventPart = new EventPart(file);
-                    eventPart.parseData(mapData);
-                    this._eventParts.push(eventPart);
+                    eventPart.parseData(mapData["_events"]);
+                    if (eventPart._events.length > 0)
+                        this._eventParts.push(eventPart);
                 }
             });
 
-            if(this._eventParts.length > 0)
+            if (this._eventParts.length > 0)
                 this._ownEvents = true;
         }
     }
 }
 
 mapManager.prototype.loadParts = function (mapsPath) {
-    this._eventParts = [];
+    if (!this._ownEvents)
+        this._eventParts = [];
     this._mapParts = [];
     this._obstacleParts = [];
     this._partsLoaded = false;
@@ -86,6 +90,7 @@ mapManager.prototype.loadParts = function (mapsPath) {
                 const data = fs.readFileSync(filePath);
                 const mapData = JSON.parse(data);
 
+
                 var eventPart = new EventPart(file);
                 var mapPart = new MapPart(file);
                 var obstaclePart = new ObstaclePart(file);
@@ -95,9 +100,12 @@ mapManager.prototype.loadParts = function (mapsPath) {
                 mapPart.parseData(mapData["_notes"]);
                 obstaclePart.parseData(mapData["_obstacles"]);
 
-                this._eventParts.push(eventPart);
-                this._mapParts.push(mapPart);
-                this._obstacleParts.push(obstaclePart);
+                if (eventPart._events.length > 0)
+                    this._eventParts.push(eventPart);
+                if (mapPart._notes.length > 0)
+                    this._mapParts.push(mapPart);
+                if (obstaclePart._obstacles.length > 0)
+                    this._obstacleParts.push(obstaclePart);
             }
         });
 
@@ -118,9 +126,11 @@ mapManager.prototype.setSavePath = function (savePath) {
 
 mapManager.prototype.sort = function (array) {
     array.sort((a, b) => {
-        if (a.getLowestTime() > b.getLowestTime())
+        var first = a.getLowestObject();
+        var second = b.getLowestObject();
+        if (first._time > second._time)
             return 1;
-        if (a.getLowestTime() < b.getLowestTime())
+        if (first._time < second._time)
             return -1;
         return 0;
     })
@@ -138,14 +148,31 @@ mapManager.prototype.sortObstacleParts = function () {
     this.sort(this._obstacleParts);
 }
 
+mapManager.prototype.validateTransition = function () {
+    var warnings = [];
+    if (this._mapParts.length > 1) {
+        for (let i = 0; i < this._mapParts.length - 1; i++) {
+            const part = this._mapParts[i];
+            const nextPart = this._mapParts[i + 1];
+            if (!this._validater.validateTransition(part, nextPart)) {
+                warnings.push("\n\t" + part.getHighestObject()._time + " (" + part.getName() + ")\n\t\thas a bad transition to\n\t" + nextPart.getLowestObject()._time + " (" + nextPart.getName() + ")\n");
+            }
+        }
+    }
+    return warnings;
+}
+
 mapManager.prototype.validate = function (array) {
     var problems = [];
     if (array.length > 1) {
         for (let i = 0; i < array.length - 1; i++) {
             const part = array[i];
             const nextPart = array[i + 1];
-            if (part.getHighestTime() >= nextPart.getLowestTime())
-                problems.push("\n\t" + part.getHighestTime() + " (" + part.getName() + ")\n\tshould be lower than\n\t" + nextPart.getLowestTime() + " (" + nextPart.getName() + ")\n");
+            if (!this._validater.validateBounds(part, nextPart)) {
+                const partTime = Math.round(part.getHighestObject()._time * 100) / 100;
+                const nextPartTime = Math.round(nextPart.getLowestObject()._time * 100) / 100
+                problems.push("\n\t" + partTime + " (" + part.getName() + ")\n\t\tshould be lower than\n\t" + nextPartTime + " (" + nextPart.getName() + ")\n");
+            }
         }
     }
     return problems;
@@ -157,7 +184,6 @@ mapManager.prototype.validateEvents = function () {
 
 mapManager.prototype.validateNotes = function () {
     var problems = this.validate(this._mapParts);
-    // console.log(problems);
     return problems;
 }
 
@@ -234,7 +260,7 @@ mapManager.prototype.build = function () {
     return false;
 }
 
-mapManager.prototype.getFilenames = function(array) {
+mapManager.prototype.getFilenames = function (array) {
     var names = [];
 
     array.forEach(element => {
@@ -244,17 +270,25 @@ mapManager.prototype.getFilenames = function(array) {
     return names;
 }
 
-mapManager.prototype.getEventpartNames = function()
-{
+mapManager.prototype.getEventpartNames = function () {
     return this.getFilenames(this._eventParts);
 }
 
-mapManager.prototype.getMappartNames = function()
-{
+mapManager.prototype.getMappartNames = function () {
     return this.getFilenames(this._mapParts);
 }
 
-mapManager.prototype.getObstaclepartNames = function()
-{
+mapManager.prototype.getObstaclepartNames = function () {
     return this.getFilenames(this._obstacleParts);
+}
+
+mapManager.prototype.validateNoteDirection = function (first, second) {
+    const distance = first._time - second._time;
+    const directions = [0, 5, 3, 7, 1, 6, 2, 4];
+    const firstCD = directions.indexOf(first._cutDirection);
+    const secondCD = directions.indexOf(second._cutDirection);
+    const diff = Math.abs(Math.abs((secondCD - 4) - (firstCD - 4)) - 4);
+    if (diff < 2 || diff == 2 && distance > 0.45)
+        return true;
+    return false;
 }

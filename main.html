@@ -16,91 +16,102 @@
         <div class="sidenav-header">
             Included files:
         </div>
-        <div id="base-name" style="display: none;">
+        <div id="base-parent" style="display: none;">
             <div class="sidenav-title">
                 Base file:
             </div>
+            <div id="base-name">
+
+            </div>
         </div>
-        <div id="events-name" style="display: none;">
+        <div id="events-parent" style="display: none;">
             <div class="sidenav-title">
                 Lighting file(s):
             </div>
+            <div id="events-name">
+
+            </div>
         </div>
-        <div id="parts-name" style="display: none;">
+        <div id="parts-parent" style="display: none;">
             <div class="sidenav-title">
                 Map file(s):
             </div>
+            <div id="parts-name">
+
+            </div>
         </div>
-        <div id="output-name" style="display: none;">
+        <div id="output-parent" style="display: none;">
             <div class="sidenav-title">
                 Output path:
+            </div>
+            <div id="output-name">
+
             </div>
         </div>
     </div>
     <div id="path-selection-container">
-        <div class="container-fluid">
+        <div class="container-fluid" style="height: 275px">
             <br>
             <div class="row">
-                <div class="col-4">
-                    <button type="button" id="base-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
-                        base file</button>
-                </div>
-                <div class="col-4">
-                    <button type="button" id="events-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
-                        events file</button>
-                </div>
-                <div class="col-4">
+                <div class="col-6"></div>
+                <div class="col-6">
                     <input type="checkbox" id="toggle-events-cbx">
                     <label for="toggle-events-cbx">Select directory</label>
                 </div>
             </div>
+            <div class="row">
+                <div class="col-6">
+                    <button type="button" id="base-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
+                        base file</button>
+                </div>
+                <div class="col-6">
+                    <button type="button" id="events-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
+                        events file</button>
+                </div>
+            </div>
             <br>
             <div class="row">
-                <div class="col-4">
+                <div class="col-6">
                     <button type="button" id="path-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
                         maps directory</button>
                 </div>
-                <div class="col-4">
+                <div class="col-6">
                     <button type="button" id="output-dialog-btn" class="btn btn-secondary btn-sm" style="width: 100%">Select
                         output location</button>
                 </div>
             </div>
+            <br>
             <div class="row">
-                <div class="col-12 info-text">
-                    Displays details to problems when merging:
+                <div class="col-4"></div>
+                <div id="validation-output" class="col-4">
+                    NOTHING
+                </div>
+                <div class="col-4"></div>
+            </div>
+            <div class="row">
+                <div class="col-4">
+                    <button type="button" id="save-data-btn" class="btn btn-secondary btn-sm" style="width: 100%"
+                        disabled>Save map</button>
+
+                </div>
+                <div class="col-4">
+                    <button type="button" id="load-data-btn" class="btn btn-secondary btn-sm" style="width: 100%"
+                        disabled>Check data</button>
+                </div>
+                <div class="col-4">
+                    <button type="button" id="clear-data-btn" class="btn btn-secondary btn-sm" style="width: 100%">Clear
+                        all</button>
                 </div>
             </div>
             <div class="row">
-                <div class="col-8">
-                    <textarea id="error-log" class="full-size" disabled></textarea>
+                <div class="col-12 info-text">
+                    Displays details about possible merging conflicts:
                 </div>
-                <div class="col-4">
-                    <div class="row">
-                        <div class="col-12">
-                            <button type="button" id="load-data-btn" class="btn btn-secondary btn-sm" style="width: 100%"
-                                disabled>Check data</button>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div id="validation-output" class="col-12">
-                            NOTHING
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <button type="button" id="save-data-btn" class="btn btn-secondary btn-sm" style="width: 100%"
-                                disabled>Save map</button>
-                        </div>
-                    </div>
-                    <br><br>
-                    <div class="row">
-                        <div class="col-12">
-                            <button type="button" id="clear-data-btn" class="btn btn-secondary btn-sm" style="width: 100%">Clear
-                                all</button>
-                        </div>
-                    </div>
+            </div>
+            <div class="row" style="height: 100%">
+                <div class="col-12">
+                    <textarea id="error-log" class="full-size" wrap="off" disabled></textarea>
                 </div>
-                <div class="col-4"></div>
             </div>
         </div>
     </div>
@@ -111,9 +122,10 @@
     <script src="./frameworks/popper.min.js"></script>
     <script src="./frameworks/bootstrap.min.js"></script>
     <script>if (window.module) module = window.module;</script>
-    <script>
+    <script src="./renderer.js"></script>
+    <!-- <script>
         require("./renderer.js");
-    </script>
+    </script> -->
 </body>
 
 </html>

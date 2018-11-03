@@ -25,37 +25,37 @@ obstaclePart.prototype.getObstacles = function () {
     return this._obstacles;
 }
 
-obstaclePart.prototype.getLowestTime = function () {
+obstaclePart.prototype.getLowestObject = function () {
     if (this._obstacles.length > 0) {
-        var lowestTime = this._obstacles[0]._time;
+        var lowestObj = this._obstacles[0];
 
         for (let i = 0; i < this._obstacles.length; i++) {
             const obstacle = this._obstacles[i];
             const time = obstacle._time;
 
-            if (time < lowestTime)
-                lowestTime = time;
+            if (time < lowestObj._time)
+                lowestObj = obstacle;
         }
 
-        return lowestTime;
+        return lowestObj;
     }
 
     return undefined;
 }
 
-obstaclePart.prototype.getHighestTime = function () {
+obstaclePart.prototype.getHighestObject = function () {
     if (this._obstacles.length > 0) {
-        var highestTime = this._obstacles[0]._time;
+        var highestObj = this._obstacles[0];
 
         for (let i = 0; i < this._obstacles.length; i++) {
             const obstacle = this._obstacles[i];
             const time = obstacle._time;
 
-            if (time > highestTime)
-                highestTime = time;
+            if (time > highestObj._time)
+                highestObj = time;
         }
 
-        return highestTime;
+        return highestObj;
     }
 
     return undefined;

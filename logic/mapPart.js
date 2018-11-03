@@ -30,37 +30,85 @@ mapPart.prototype.getNotes = function () {
     return this._notes;
 }
 
-mapPart.prototype.getLowestTime = function () {
+// type 0 = red
+// type 1 = blue
+mapPart.prototype.getLowestObject = function (color = undefined) {
     if (this._notes.length > 0) {
-        var lowestTime = this._notes[0]._time;
-
-        for (let i = 0; i < this._notes.length; i++) {
-            const note = this._notes[i];
-            const time = note._time;
-
-            if (time < lowestTime)
-                lowestTime = time;
+        var lowestObj = undefined;
+        if(color == 'blue') {
+            for (let i = 0; i < this._notes.length; i++) {
+                const note = this._notes[i];
+                if(note._type == 1) {
+                    if(lowestObj === undefined)
+                        lowestObj = note;
+                    else if(note._time < lowestObj._time)
+                        lowestObj = note;
+                }
+            }
         }
-
-        return lowestTime;
+        else if(color == 'red') {
+            for (let i = 0; i < this._notes.length; i++) {
+                const note = this._notes[i];
+                if(note._type == 0) {
+                    if(lowestObj === undefined)
+                        lowestObj = note;
+                    else if(note._time < lowestObj._time)
+                        lowestObj = note;
+                }
+            }
+        }
+        else {
+            lowestObj = this._notes[0];
+            for (let i = 1; i < this._notes.length; i++) {
+                const note = this._notes[i];
+                const time = note._time;
+    
+                if (time < lowestObj._time)
+                    lowestObj = note;
+            }
+        }
+        return lowestObj;
     }
 
     return undefined;
 }
 
-mapPart.prototype.getHighestTime = function () {
+mapPart.prototype.getHighestObject = function (color = undefined) {
     if (this._notes.length > 0) {
-        var highestTime = this._notes[0]._time;
-
-        for (let i = 0; i < this._notes.length; i++) {
-            const note = this._notes[i];
-            const time = note._time;
-
-            if (time > highestTime)
-                highestTime = time;
+        var highestObj = undefined;
+        if(color == 'blue') {
+            for (let i = 0; i < this._notes.length; i++) {
+                const note = this._notes[i];
+                if(note._type == 1) {
+                    if(highestObj === undefined)
+                        highestObj = note;
+                    else if(note._time > highestObj._time)
+                        highestObj = note;
+                }
+            }
         }
-
-        return highestTime;
+        else if(color == 'red') {
+            for (let i = 0; i < this._notes.length; i++) {
+                const note = this._notes[i];
+                if(note._type == 0) {
+                    if(highestObj === undefined)
+                        highestObj = note;
+                    else if(note._time > highestObj._time)
+                        highestObj = note;
+                }
+            }
+        }
+        else {
+            highestObj = this._notes[0];
+            for (let i = 1; i < this._notes.length; i++) {
+                const note = this._notes[i];
+                const time = note._time;
+    
+                if (time > highestObj._time)
+                    highestObj = note;
+            }
+        }
+        return highestObj;
     }
 
     return undefined;

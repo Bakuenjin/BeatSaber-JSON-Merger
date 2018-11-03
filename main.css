@@ -55,6 +55,10 @@ body {
     color: #ae2844 !important;
 }
 
+.warning {
+    color: #ff6700 !important;
+}
+
 .full-size {
     width: 100%;
     height: 100%;
@@ -66,7 +70,7 @@ textarea {
 }
 
 #side-nav {
-    height: 100%; /* Full-height: remove this if you want "auto" height */
+    height: calc(100% - 30px); /* Full-height: remove this if you want "auto" height */
     width: 300px; /* Set the width of the sidebar */
     position: fixed; /* Fixed Sidebar (stay in place on scroll) */
     z-index: 50; /* Stay on top */
@@ -75,7 +79,7 @@ textarea {
     background-color: #484d53;
     /* background-color: #44484c; *//* Black */
     overflow-x: hidden; /* Disable horizontal scroll */
-    padding-top: 30px;
+    margin-top: 30px;
 }
 
 .sidenav-header {
@@ -86,7 +90,7 @@ textarea {
 
 .sidenav-title {
     padding-left: 12px;
-    padding-top: 3px;
+    padding-top: 6px;
     font-size: 18px;
     color: #eaeaea;
 }
@@ -138,3 +142,14 @@ textarea {
     background-color: crimson;
     /* color: #484d53; */
 }
+
+::-webkit-scrollbar {
+    -webkit-appearance: none;
+    width: 8px;
+    z-index: 0;
+  }
+  ::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: #393d42;
+    /* -webkit-box-shadow: 20px 20px 20px rgba(255, 255, 255, .5); */
+  }
