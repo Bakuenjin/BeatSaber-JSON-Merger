@@ -26,10 +26,8 @@ const eventsNameDiv = document.getElementById("events-name");
 const partsNameDiv = document.getElementById("parts-name");
 const outputNameDiv = document.getElementById("output-name");
 
-// const basePopup = document.getElementById('base-btn-info');
-// const eventsPopup = document.getElementById('events-btn-info');
-// const pathPopup = document.getElementById('parts-btn-info');
-// const outputPopup = document.getElementById('output-btn-info');
+const cbxHolderDiv = document.getElementById("cbx-holder");
+const mergeCbx = document.getElementById("merge-cbx");
 
 const eventsDialogModeCbx = document.getElementById("toggle-events-cbx");
 const validationDiv = document.getElementById("validation-output");
@@ -159,6 +157,10 @@ outputDialogBtn.onclick = function () {
     tryUnlock();
 }
 
+mergeCbx.onchange = function () {
+    saveDataBtn.disabled = !mergeCbx.checked;
+}
+
 validateDataBtn.onclick = function () {
     var errorText = "Checking for problems...\n";
     var eventProblems = mapManager.validateEvents();
@@ -196,6 +198,7 @@ validateDataBtn.onclick = function () {
         validationDiv.innerHTML = "INVALID";
         validationDiv.classList.remove("valid", "invalid", "warning");
         validationDiv.classList.add("invalid");
+        cbxHolderDiv.style.display = "block";
         saveDataBtn.disabled = true;
     }
     else if(noteWarnings.length > 0) {
@@ -203,6 +206,7 @@ validateDataBtn.onclick = function () {
         validationDiv.innerHTML = "WARNING";
         validationDiv.classList.remove("valid", "invalid", "warning");
         validationDiv.classList.add("warning");
+        cbxHolderDiv.style.display = "none";
         saveDataBtn.disabled = false;
     }
     else {
@@ -210,6 +214,7 @@ validateDataBtn.onclick = function () {
         validationDiv.innerHTML = "VALID";
         validationDiv.classList.remove("valid", "invalid", "warning");
         validationDiv.classList.add("valid");
+        cbxHolderDiv.style.display = "none";
         saveDataBtn.disabled = false;
     }
 }
@@ -235,6 +240,7 @@ clearDataBtn.onclick = function () {
         textDiv.remove();
     }
 
+    cbxHolderDiv.style.display = "none";
     baseNameParent.style.display = "none";
     eventsNameParent.style.display = "none";
     partsNameParent.style.display = "none";
